@@ -9,8 +9,8 @@ class Url {
 
   factory Url.fromJson(Map<String, dynamic> json) {
     return Url(
-      type: json['type'] as String,
-      url: json['url'] as String,
+      type: json['type'],
+      url: json['url'],
     );
   }
 }

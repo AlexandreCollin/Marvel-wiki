@@ -10,7 +10,10 @@ class Api {
 
   static const String baseEndpoint = 'https://gateway.marvel.com/v1/public';
 
-  static Future<Map<String, dynamic>> _send(String endpoint) {
+  static Future<Map<String, dynamic>> _send(
+    String endpoint, {
+    Map<String, String>? queryParameters,
+  }) async {
     final String now = DateTime.now().toString();
     final Uri url = Uri.parse("$baseEndpoint/$endpoint").replace(
       queryParameters: {
@@ -18,16 +21,27 @@ class Api {
         'ts': now,
         'hash':
             md5.convert(utf8.encode(now + privateKey + publicKey)).toString(),
+        ...?queryParameters,
       },
     );
 
-    return http.get(url).then((value) {
-      return jsonDecode(value.body);
-    });
+    final response = await http.get(url);
+
+    final body = jsonDecode(response.body);
+
+    if (response.statusCode != 200) {
+      return Future.error(body);
+    }
+
+    return body;
   }
 
-  static Future<CharacterDataContainer> getCharacters() {
-    return _send('characters').then((value) {
+  static Future<CharacterDataContainer> getCharacters({
+    int offset = 0,
+  }) {
+    return _send('characters', queryParameters: {
+      'offset': offset.toString(),
+    }).then((value) {
       return CharacterDataContainer.fromJson(value["data"]);
     });
   }

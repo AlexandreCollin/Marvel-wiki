@@ -9,8 +9,8 @@ class SeriesSummary {
 
   factory SeriesSummary.fromJson(Map<String, dynamic> json) {
     return SeriesSummary(
-      resourceURI: json['resourceURI'] as String,
-      name: json['name'] as String,
+      resourceURI: json['resourceURI'],
+      name: json['name'],
     );
   }
 }

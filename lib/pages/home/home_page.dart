@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_wiki/models/character_data_container.dart';
+import 'package:marvel_wiki/models/character.dart';
+import 'package:marvel_wiki/pages/home/components/characters.dart';
 import 'package:marvel_wiki/utils/api.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,12 +11,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final Future<CharacterDataContainer> _characters;
+  late final Future<void> _characters;
+  final List<Character> _charactersList = [];
+  late final int _total;
+  bool _loading = false;
 
   @override
   void initState() {
     super.initState();
-    _characters = Api.getCharacters();
+    _characters = Api.getCharacters(
+      offset: _charactersList.length,
+    ).then((value) {
+      _charactersList.addAll(value.results);
+      _total = value.total;
+    });
   }
 
   @override
@@ -30,46 +39,41 @@ class _HomePageState extends State<HomePage> {
                 child: CircularProgressIndicator(),
               );
             }
-            if (snapshot.hasError || !snapshot.hasData) {
-              return const Center(
-                child: Text(
-                  "error",
-                ),
+            if (snapshot.hasError) {
+              return Center(
+                child: Text("error ${snapshot.error}"),
               );
             }
-            return GridView.count(
-              crossAxisCount: 2,
-              children: snapshot.data!.results.map((e) {
-                return Card(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Image(
-                        image: NetworkImage(e.thumbnail.url),
-                      ),
-                      Text(
-                        e.name,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
-                          foreground: Paint()
-                            ..style = PaintingStyle.stroke
-                            ..strokeWidth = 2
-                            ..color = Colors.black,
-                        ),
-                      ),
-                      Text(
-                        e.name,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+
+            return Stack(
+              alignment: Alignment.topRight,
+              children: [
+                MarvelCharacters(
+                  characters: _charactersList,
+                  loading: _loading,
+                  onEndOfList: () {
+                    if (_loading || _charactersList.length >= _total) {
+                      return;
+                    }
+                    setState(() {
+                      _loading = true;
+                    });
+                    Api.getCharacters(
+                      offset: _charactersList.length,
+                    ).then((value) {
+                      setState(() {
+                        _charactersList.addAll(value.results);
+                        _loading = false;
+                      });
+                    });
+                  },
+                ),
+                if (_loading)
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(),
                   ),
-                );
-              }).toList(),
+              ],
             );
           },
         ),

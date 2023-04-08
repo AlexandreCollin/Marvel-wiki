@@ -22,7 +22,7 @@ class CharacterDataContainer {
       total: json['total'],
       count: json['count'],
       results: (json['results'] as List<dynamic>)
-          .map((dynamic e) => Character.fromJson(e as Map<String, dynamic>))
+          .map((e) => Character.fromJson(e))
           .toList(),
     );
   }

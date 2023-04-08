@@ -9,8 +9,8 @@ class MarvelImage {
 
   factory MarvelImage.fromJson(Map<String, dynamic> json) {
     return MarvelImage(
-      path: json['path'] as String,
-      extension: json['extension'] as String,
+      path: json['path'],
+      extension: json['extension'],
     );
   }
 

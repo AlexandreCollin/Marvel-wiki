@@ -15,12 +15,12 @@ class SeriesList {
 
   factory SeriesList.fromJson(Map<String, dynamic> json) {
     return SeriesList(
-      available: json['available'] as int,
-      collectionURI: json['collectionURI'] as String,
+      available: json['available'],
+      collectionURI: json['collectionURI'],
       items: (json['items'] as List<dynamic>)
-          .map((dynamic e) => SeriesSummary.fromJson(e as Map<String, dynamic>))
+          .map((e) => SeriesSummary.fromJson(e))
           .toList(),
-      returned: json['returned'] as int,
+      returned: json['returned'],
     );
   }
 }

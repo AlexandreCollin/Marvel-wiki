@@ -34,20 +34,19 @@ class Character {
 
   factory Character.fromJson(Map<String, dynamic> json) {
     return Character(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      modified: DateTime.parse(json['modified'] as String),
-      resourceURI: json['resourceURI'] as String,
-      urls: (json['urls'] as List<dynamic>)
-          .map((dynamic e) => Url.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      thumbnail:
-          MarvelImage.fromJson(json['thumbnail'] as Map<String, dynamic>),
-      comics: ComicList.fromJson(json['comics'] as Map<String, dynamic>),
-      stories: StoryList.fromJson(json['stories'] as Map<String, dynamic>),
-      events: EventList.fromJson(json['events'] as Map<String, dynamic>),
-      series: SeriesList.fromJson(json['series'] as Map<String, dynamic>),
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      modified: DateTime.parse(json['modified']),
+      resourceURI: json['resourceURI'],
+      urls: (json['urls'] as List<dynamic>).map((e) {
+        return Url.fromJson(e);
+      }).toList(),
+      thumbnail: MarvelImage.fromJson(json['thumbnail']),
+      comics: ComicList.fromJson(json['comics']),
+      stories: StoryList.fromJson(json['stories']),
+      events: EventList.fromJson(json['events']),
+      series: SeriesList.fromJson(json['series']),
     );
   }
 }

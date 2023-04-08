@@ -15,11 +15,11 @@ class StoryList {
 
   factory StoryList.fromJson(Map<String, dynamic> json) {
     return StoryList(
-      available: json['available'] as int,
-      returned: json['returned'] as int,
-      collectionURI: json['collectionURI'] as String,
+      available: json['available'],
+      returned: json['returned'],
+      collectionURI: json['collectionURI'],
       items: (json['items'] as List<dynamic>)
-          .map((dynamic e) => StorySummary.fromJson(e as Map<String, dynamic>))
+          .map((e) => StorySummary.fromJson(e))
           .toList(),
     );
   }

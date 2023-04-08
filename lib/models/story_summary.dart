@@ -11,9 +11,9 @@ class StorySummary {
 
   factory StorySummary.fromJson(Map<String, dynamic> json) {
     return StorySummary(
-      resourceURI: json['resourceURI'] as String,
-      name: json['name'] as String,
-      type: json['type'] as String,
+      resourceURI: json['resourceURI'],
+      name: json['name'],
+      type: json['type'],
     );
   }
 }

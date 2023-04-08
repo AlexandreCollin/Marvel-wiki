@@ -9,8 +9,8 @@ class ComicSummary {
 
   factory ComicSummary.fromJson(Map<String, dynamic> json) {
     return ComicSummary(
-      resourceURI: json['resourceURI'] as String,
-      name: json['name'] as String,
+      resourceURI: json['resourceURI'],
+      name: json['name'],
     );
   }
 }
