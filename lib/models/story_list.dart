@@ -1,4 +1,4 @@
-import 'package:marvel_wiki/models/story_summary.dart';
+import 'package:marvel_wiki/models/character/story_summary.dart';
 
 class StoryList {
   const StoryList({

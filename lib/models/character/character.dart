@@ -1,7 +1,7 @@
 import 'package:marvel_wiki/models/comic_list.dart';
 import 'package:marvel_wiki/models/event_list.dart';
 import 'package:marvel_wiki/models/marvel_image.dart';
-import 'package:marvel_wiki/models/series_list.dart';
+import 'package:marvel_wiki/models/character/series_list.dart';
 import 'package:marvel_wiki/models/story_list.dart';
 import 'package:marvel_wiki/models/url.dart';
 

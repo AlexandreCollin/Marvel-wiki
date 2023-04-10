@@ -1,4 +1,4 @@
-import 'package:marvel_wiki/models/event_summary.dart';
+import 'package:marvel_wiki/models/character/event_summary.dart';
 
 class EventList {
   const EventList({

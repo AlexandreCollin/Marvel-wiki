@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_wiki/models/character.dart';
+import 'package:marvel_wiki/models/character/character.dart';
+import 'package:marvel_wiki/pages/character/character_page.dart';
 
 class MarvelCharacters extends StatefulWidget {
   const MarvelCharacters({
@@ -39,33 +40,40 @@ class _MarvelCharactersState extends State<MarvelCharacters> {
       crossAxisCount: 2,
       shrinkWrap: true,
       children: widget.characters.map((e) {
-        return Card(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Image(
-                image: NetworkImage(e.thumbnail.url),
-              ),
-              Text(
-                e.name,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 2
-                    ..color = Colors.black,
+        return InkWell(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => CharacterPage(character: e),
+            ),
+          ),
+          child: Card(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Image(
+                  image: NetworkImage(e.thumbnail.url),
                 ),
-              ),
-              Text(
-                e.name,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
+                Text(
+                  e.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 2
+                      ..color = Colors.black,
+                  ),
                 ),
-              ),
-            ],
+                Text(
+                  e.name,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       }).toList(),

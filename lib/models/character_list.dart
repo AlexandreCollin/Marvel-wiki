@@ -1,25 +1,25 @@
-import 'package:marvel_wiki/models/character/comic_summary.dart';
+import 'package:marvel_wiki/models/character_summary.dart';
 
-class ComicList {
-  const ComicList({
+class CharacterList {
+  CharacterList({
     required this.available,
+    required this.returned,
     required this.collectionURI,
     required this.items,
-    required this.returned,
   });
 
   final int available;
   final int returned;
   final String collectionURI;
-  final List<ComicSummary> items;
+  final List<CharacterSummary> items;
 
-  factory ComicList.fromJson(Map<String, dynamic> json) {
-    return ComicList(
+  factory CharacterList.fromJson(Map<String, dynamic> json) {
+    return CharacterList(
       available: json['available'],
       returned: json['returned'],
       collectionURI: json['collectionURI'],
       items: (json['items'] as List<dynamic>)
-          .map((e) => ComicSummary.fromJson(e))
+          .map((e) => CharacterSummary.fromJson(e))
           .toList(),
     );
   }

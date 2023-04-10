@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_wiki/models/character.dart';
+import 'package:marvel_wiki/models/character/character.dart';
 import 'package:marvel_wiki/pages/home/components/characters.dart';
 import 'package:marvel_wiki/utils/api.dart';
 

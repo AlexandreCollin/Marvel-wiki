@@ -1,4 +1,4 @@
-import 'package:marvel_wiki/models/character.dart';
+import 'package:marvel_wiki/models/character/character.dart';
 
 class CharacterDataContainer {
   const CharacterDataContainer({

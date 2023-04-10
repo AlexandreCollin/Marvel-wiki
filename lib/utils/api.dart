@@ -1,12 +1,15 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
-import 'package:marvel_wiki/models/character_data_container.dart';
+import 'package:marvel_wiki/models/character/character_data_container.dart';
+import 'package:marvel_wiki/models/comic/comic_data_container.dart';
+import 'package:marvel_wiki/models/creator/creator_data_container.dart';
 
 class Api {
-  static const String privateKey = "PRIVATE_KEY";
-  static const String publicKey = "PUBLIC_KEY";
+  static const String privateKey = "Private Key";
+  static const String publicKey = "Public Key";
 
   static const String baseEndpoint = 'https://gateway.marvel.com/v1/public';
 
@@ -14,8 +17,9 @@ class Api {
     String endpoint, {
     Map<String, String>? queryParameters,
   }) async {
+    log("Api: send request to $endpoint");
     final String now = DateTime.now().toString();
-    final Uri url = Uri.parse("$baseEndpoint/$endpoint").replace(
+    final Uri url = Uri.parse(endpoint).replace(
       queryParameters: {
         'apikey': publicKey,
         'ts': now,
@@ -39,10 +43,22 @@ class Api {
   static Future<CharacterDataContainer> getCharacters({
     int offset = 0,
   }) {
-    return _send('characters', queryParameters: {
+    return _send("$baseEndpoint/characters", queryParameters: {
       'offset': offset.toString(),
     }).then((value) {
       return CharacterDataContainer.fromJson(value["data"]);
+    });
+  }
+
+  static Future<ComicsDataContainer> getComicsFromUri(String uri) async {
+    return _send(uri).then((value) {
+      return ComicsDataContainer.fromJson(value["data"]);
+    });
+  }
+
+  static Future<CreatorDataContainer> getCreatorsFromUri(String uri) async {
+    return _send(uri).then((value) {
+      return CreatorDataContainer.fromJson(value["data"]);
     });
   }
 }
