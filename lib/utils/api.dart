@@ -42,10 +42,20 @@ class Api {
 
   static Future<CharacterDataContainer> getCharacters({
     int offset = 0,
+    String nameStartWith = "",
   }) {
-    return _send("$baseEndpoint/characters", queryParameters: {
+    final Map<String, String> queryParameters = {
       'offset': offset.toString(),
-    }).then((value) {
+    };
+
+    if (nameStartWith.isNotEmpty) {
+      queryParameters['nameStartsWith'] = nameStartWith;
+    }
+
+    return _send(
+      "$baseEndpoint/characters",
+      queryParameters: queryParameters,
+    ).then((value) {
       return CharacterDataContainer.fromJson(value["data"]);
     });
   }

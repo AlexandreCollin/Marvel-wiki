@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_wiki/models/character/character.dart';
 import 'package:marvel_wiki/pages/home/components/characters.dart';
+import 'package:marvel_wiki/pages/home/components/search_bar.dart';
 import 'package:marvel_wiki/utils/api.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,9 +12,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final Future<void> _characters;
+  late Future<void> _characters;
   final List<Character> _charactersList = [];
-  late final int _total;
+  int _total = -1;
   bool _loading = false;
 
   @override
@@ -34,7 +35,8 @@ class _HomePageState extends State<HomePage> {
         child: FutureBuilder(
           future: _characters,
           builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
+            if (snapshot.connectionState != ConnectionState.done &&
+                _total == -1) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
@@ -48,31 +50,47 @@ class _HomePageState extends State<HomePage> {
             return Stack(
               alignment: Alignment.topRight,
               children: [
-                MarvelCharacters(
-                  characters: _charactersList,
-                  loading: _loading,
-                  onEndOfList: () {
-                    if (_loading || _charactersList.length >= _total) {
-                      return;
-                    }
+                Padding(
+                  padding: const EdgeInsets.only(top: 50.0),
+                  child: MarvelCharacters(
+                    characters: _charactersList,
+                    loading: _loading,
+                    onEndOfList: () {
+                      if (_loading || _charactersList.length >= _total) {
+                        return;
+                      }
+                      setState(() {
+                        _loading = true;
+                      });
+                      Api.getCharacters(
+                        offset: _charactersList.length,
+                      ).then((value) {
+                        setState(() {
+                          _charactersList.addAll(value.results);
+                          _loading = false;
+                        });
+                      });
+                    },
+                  ),
+                ),
+                SearchBar(
+                  onChanged: (value) {
                     setState(() {
                       _loading = true;
-                    });
-                    Api.getCharacters(
-                      offset: _charactersList.length,
-                    ).then((value) {
-                      setState(() {
-                        _charactersList.addAll(value.results);
-                        _loading = false;
+                      _characters = Api.getCharacters(
+                        offset: 0,
+                        nameStartWith: value ?? "",
+                      ).then((value) {
+                        setState(() {
+                          _charactersList.clear();
+                          _charactersList.addAll(value.results);
+                          _loading = false;
+                          _total = value.total;
+                        });
                       });
                     });
                   },
                 ),
-                if (_loading)
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: CircularProgressIndicator(),
-                  ),
               ],
             );
           },
